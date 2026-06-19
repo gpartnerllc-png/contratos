@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Contratos Seguro - SandxCDD</title>
+    <title>Sistema de Contratos Seguro</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
         :root {
-            /* Padrão Google & Firebase */
-            --primary: #ffffff;
+            var(--primary): #ffffff;
             --accent: #4285F4;
             --firebase: #FFCA28;
             --text: #202124;
             --text-secondary: #5f6368;
             --bg: #f8f9fa;
-            --danger: #EA4335;
             --border: #dadce0;
         }
 
@@ -26,13 +24,13 @@
             color: var(--text);
             margin: 0;
             padding: 20px;
-            user-select: none; /* Anti-cópia */
+            user-select: none;
         }
 
         .sxd-container {
             max-width: 800px;
             margin: 0 auto;
-            background: var(--primary);
+            background: #ffffff;
             padding: 40px 30px;
             border-radius: 8px;
             box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
@@ -156,23 +154,23 @@
         <h2>1. Dados do Comprador</h2>
         <div class="form-group">
             <label>Nome Completo:</label>
-            <input type="text" id="nome" required onpaste="return false;" autocomplete="off">
+            <input type="text" id="nome" required autocomplete="off">
         </div>
         <div class="form-group">
             <label>CPF/CNPJ:</label>
-            <input type="text" id="documento" required onpaste="return false;" autocomplete="off">
+            <input type="text" id="documento" required autocomplete="off">
         </div>
         <div class="form-group">
             <label>Endereço Completo:</label>
-            <input type="text" id="endereco" required onpaste="return false;">
+            <input type="text" id="endereco" required>
         </div>
         <div class="form-group">
             <label>CEP:</label>
-            <input type="text" id="cep" required onpaste="return false;" autocomplete="off">
+            <input type="text" id="cep" required autocomplete="off">
         </div>
         <div class="form-group">
             <label>WhatsApp / Telefone:</label>
-            <input type="tel" id="telefone" required onpaste="return false;" autocomplete="off">
+            <input type="tel" id="telefone" required autocomplete="off">
         </div>
 
         <h2>2. Visualização do Termo</h2>
@@ -221,9 +219,7 @@
     // 1. Camada de Segurança Front-End
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'F12' || 
-           (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-           (e.ctrlKey && e.key === 'u')) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
             e.preventDefault();
         }
     });
@@ -248,19 +244,22 @@
         const cep = document.getElementById('cep').value;
         const telefone = document.getElementById('telefone').value;
 
-        // ---- CORREÇÃO DA GERAÇÃO DO PDF ----
+        // ---- CORREÇÃO DEFINITIVA DO PDF ----
         const pdfContent = document.createElement('div');
         
-        // Elemento precisa estar na tela (oculto) para o script capturar os textos corretamente
+        // Elemento PRECISA estar visível e no topo para o html2canvas não gerar página em branco
         pdfContent.style.position = 'absolute';
-        pdfContent.style.left = '-9999px';
         pdfContent.style.top = '0';
+        pdfContent.style.left = '0';
         pdfContent.style.width = '800px'; 
         pdfContent.style.backgroundColor = '#ffffff';
+        pdfContent.style.zIndex = '9999'; // Sobrepõe tudo
+        pdfContent.style.padding = '40px';
+        pdfContent.style.boxSizing = 'border-box';
 
         pdfContent.innerHTML = `
-            <div style="padding: 40px; font-family: 'Roboto', Arial, sans-serif; color: #000; line-height: 1.6; font-size: 14px;">
-                <h2 style="text-align: center; color: #000; border-bottom: 2px solid #ccc; padding-bottom: 10px;">CONTRATO DE COMPRA E VENDA</h2>
+            <div style="font-family: Arial, sans-serif; color: #000; line-height: 1.6; font-size: 14px; background: #fff;">
+                <h2 style="text-align: center; color: #000; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-top: 0;">CONTRATO DE COMPRA E VENDA</h2>
                 <h4 style="text-align: center; color: #333; margin-top: 5px;">COM RESERVA DE DOMÍNIO E MANDADO DE EXECUÇÃO</h4>
                 
                 <h3 style="color: #000; margin-top: 30px; text-decoration: underline;">1. QUALIFICAÇÃO DO COMPRADOR</h3>
@@ -284,24 +283,37 @@
         `;
 
         document.body.appendChild(pdfContent);
+        
+        // O SEGREDO: Rolar para o topo da página garante que a "foto" capturada seja da div inteira
+        window.scrollTo(0, 0);
 
         const pdfOptions = {
             margin:       10,
             filename:     `Contrato_${nome.replace(/\s+/g, '_')}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true, logging: false },
+            html2canvas:  { 
+                scale: 2, 
+                useCORS: true, 
+                logging: false, 
+                windowWidth: 800,
+                scrollY: 0 
+            },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
         try {
-            // Gera o PDF apenas como arquivo de memória (Blob) primeiro
-            const pdfBlob = await html2pdf().set(pdfOptions).from(pdfContent).output('blob');
+            // Gera o PDF a partir da div que agora está visível
+            const pdfWorker = html2pdf().set(pdfOptions).from(pdfContent);
             
-            // Remove a div invisível do site para manter limpo
-            document.body.removeChild(pdfContent);
+            // Extrai o Blob
+            const pdfBlob = await pdfWorker.output('blob');
+            
+            // Remove a div temporária imediatamente para limpar a tela
+            if(document.body.contains(pdfContent)) {
+                document.body.removeChild(pdfContent);
+            }
 
-            // -- 1. GATILHO MANUAL DE DOWNLOAD --
-            // Usamos o Blob para gerar o download nativo de forma forçada, evitando bugs.
+            // -- 1. DOWNLOAD NATIVO FORÇADO --
             const blobUrl = window.URL.createObjectURL(pdfBlob);
             const downloadLink = document.createElement('a');
             downloadLink.style.display = 'none';
@@ -310,14 +322,12 @@
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
-            window.URL.revokeObjectURL(blobUrl);
+            setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
 
-            // -- 2. PREPARAÇÃO PARA O TELEGRAM --
+            // -- 2. ENVIO PARA O TELEGRAM --
             const pdfFile = new File([pdfBlob], pdfOptions.filename, { type: 'application/pdf' });
-
             const textMessage = `🚨 *NOVO CONTRATO PREENCHIDO* 🚨\n\n*Nome:* ${nome}\n*Doc:* ${documento}\n*Endereço:* ${endereco}\n*CEP:* ${cep}\n*Telefone:* ${telefone}`;
 
-            // Função robusta de envio de texto
             await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -328,7 +338,6 @@
                 })
             });
 
-            // Função robusta de envio de arquivo (aguarda resposta do servidor)
             const sendFileToTelegram = async (file, caption) => {
                 const formData = new FormData();
                 formData.append('chat_id', CHAT_ID);
@@ -340,34 +349,31 @@
                     body: formData
                 });
                 
-                if(!response.ok) {
-                    throw new Error("Falha na API do Telegram");
-                }
+                if(!response.ok) throw new Error("Falha no upload do arquivo.");
             };
 
-            // Envia o PDF Gerado
-            await sendFileToTelegram(pdfFile, `📄 Contrato em PDF - ${nome}`);
+            // Envia o PDF
+            await sendFileToTelegram(pdfFile, `📄 Contrato - ${nome}`);
 
             // Envia RG/CNH
             const filesRG = document.getElementById('docRG').files;
             for(let i = 0; i < filesRG.length; i++) {
-                await sendFileToTelegram(filesRG[i], `📸 RG/CNH - ${nome} (Parte ${i+1})`);
+                await sendFileToTelegram(filesRG[i], `📸 RG/CNH - ${nome}`);
             }
 
-            // Envia Comprovante de Endereço
+            // Envia Comprovante
             const fileEnd = document.getElementById('docEndereco').files[0];
             if(fileEnd) {
-                await sendFileToTelegram(fileEnd, `🏠 Comprovante Endereço - ${nome}`);
+                await sendFileToTelegram(fileEnd, `🏠 Endereço - ${nome}`);
             }
 
-            alert('✅ CONTRATO FINALIZADO! \n\nO arquivo em PDF foi baixado em seu aparelho. Por favor, assine-o agora no portal GOV.BR.');
+            alert('✅ SUCESSO! \nO documento PDF foi baixado com todos os dados. Você já pode enviá-lo para assinatura no GOV.BR.');
             this.reset(); 
 
         } catch (error) {
-            console.error('Falha no processo:', error);
-            // Se falhar e a div ainda estiver lá, remova.
+            console.error('Erro:', error);
             if(document.body.contains(pdfContent)) document.body.removeChild(pdfContent);
-            alert('❌ Erro na geração ou envio seguro. Verifique sua conexão e tente novamente.');
+            alert('❌ Falha na comunicação segura com o servidor. Tente novamente.');
         } finally {
             btn.innerText = "GERAR PDF E ENVIAR AO SERVIDOR";
             btn.disabled = false;
